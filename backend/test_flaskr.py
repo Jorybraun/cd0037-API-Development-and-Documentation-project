@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flaskr import create_app
 from models import setup_db, Question, Category
-
+from pprint import pprint
 
 class TriviaTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
@@ -15,8 +15,12 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "trivia_test"
-        self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
+        self.database_path = "postgres://{}/{}".format('udacity:udacity@localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
+
+        self.new_category = {
+            "type": "test"
+        }
 
         # binds the app to the current context
         with self.app.app_context():
@@ -33,7 +37,11 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
-
+    def test_get_all_categories(self): 
+        res = self.client().get('/categories')
+        self.assertEqual(res.status_code, 200)
+        data = json.loads(res.data)
+        self.assertEqual(len(data['categories']), 6)
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
