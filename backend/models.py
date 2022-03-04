@@ -1,5 +1,6 @@
 import os
-from sqlalchemy import Column, String, Integer, create_engine
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import json
@@ -21,6 +22,7 @@ def setup_db(app, database_path=database_path):
     db.init_app(app)
     migrate = Migrate(app, db)
     db.create_all()
+    return db
 
 """
 Question
@@ -59,7 +61,7 @@ class Question(db.Model):
             'answer': self.answer,
             'category': self.category,
             'difficulty': self.difficulty
-            }
+        }
 
 """
 Category
